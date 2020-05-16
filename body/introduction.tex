@@ -112,6 +112,18 @@ SPARQL连接图的节点大小及边权值，使用连接代价估计并结合�
 
 \chapter{预备知识}[Preliminary knowledge]
 
+\section{RDF图模型}
+
+RDF全称为资源描述框架(resource description framework)，是万维网联盟(World Wide
+ Web consortium，简称W3C)制定的在语义Web（semantic Web）上表示和交换机器可理解
+ (machine-understandable)信息的标准数据模型[23]。在互联网中，所有能够用RDF数据
+ 表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识
+ 符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id；RDF图定义为三元
+ 组(s,p,o)的有限集合；每个三元组表示是一个事实陈述句，其中，s是主语，p是谓语，o是宾语；
+ (s,p,o)表示s与o之间具有联系p，或表示s具有属性p且其取值为o。
+
+\section{SPARQL语言与查询过程}
+
 \section{定理和定义等}[Theorem]
 \begin{theorem}[\cite{cnproceed}]
 宇宙大爆炸是一种爆炸。

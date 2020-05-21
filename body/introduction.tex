@@ -186,6 +186,16 @@ SPARQL查询处理器，调用底层的RDF存储获取相关的结果记录。SP
     \item $S_0$是在Agent初始时的状态。
 \end{itemize}
 
+总体的目标是找到一个决策策略$\pi :S\longmapsto A$（一个状态到动作的映射函数），使得期望的奖励最大化。
+马尔科夫决策过程是一个从交互中学习的过程，\ref{Interaction}表示出了这个交互学习过程：Agent是学习者，它在某个状态下采取动作并且与环境交互，Agent从环境中获取到下一个状态和动作对应的奖励。状态信息通常需要编码，也被称为observations。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 0.8\textwidth]{MDP}
+    \caption{马尔科夫决策学习者与环境交互过程}
+    \label{Interaction}
+\end{figure}
+
+\subsection{Q学习算法}
 % Local Variables:
 % TeX-master: "../main"
 % TeX-engine: xetex

@@ -118,11 +118,50 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
  Web consortium，简称W3C)制定的在语义Web（semantic Web）上表示和交换机器可理解
  (machine-understandable)信息的标准数据模型[23]。在互联网中，所有能够用RDF数据
  表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识
- 符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id；RDF图定义为三元
- 组(s,p,o)的有限集合；每个三元组表示是一个事实陈述句，其中，s是主语，p是谓语，o是宾语；
- (s,p,o)表示s与o之间具有联系p，或表示s具有属性p且其取值为o。
+ 符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id；图...
+
+ \begin{definition}[RDF项(RDF Term)]    
+    用I来表示IRI的集合
+    用RDF-L来表示文本信息(Literals)的集合
+    用RDF-B来表示空值(Blank nodes)的集合
+    用RDF-T来表示RDF项(RDF Term)
+\end{definition}
+
+\begin{definition}[（RDF三元组）]    
+    RDF三元组是形如(s,p,o)的数据组合，又被称为声明。其中s代表主体(subject)，p代表属性(property),
+    o代表客体(object)。三元组的选取区间可以表示为$(I\bigcup RDF-B)X(I\bigcup RDF-B)X(I\bigcup RDF-B\bigcup RDF-L)$。
+    
+    例如，对于三元组<Tony, graduateFrom, HIT>，Tony代表主体，graduateFrom(毕业于)代表属性，HIT代表客体。三元组的意思是
+    Tony毕业于HIT。
+\end{definition}
 
 \section{SPARQL语言与查询过程}
+
+SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数据的形式化查询语言，
+也是目前使用最广泛的查询语言。类似于SQL，SPARQL支持多种查询格式，例如SELECT、ASK、DESCRIBE、CONSTRUCT。
+其中,SELECT查询格式用于标准查询,以标准的 SPARQL XML 结果格式返回查询结果。ASK 查询返回结果是 yes 或 no,没有具体内
+容。DESCRIBE 用于提取本体和实例数据的一部分,返回一个图形,其中包含和图形模式匹配的节点的相关信息。
+\begin{definition}[（三元组模式）]    
+    一个三元组模式(Triple Pattern)是集合$(RDF-T \bigcup V)X(I \bigcup V)X(RDF-T \bigcup V)$的一项，其中V代表变量。
+\end{definition}
+\begin{definition}[基本图模式(BGP)]    
+    一个三元组模式(Triple Pattern)是三元组模式(Triple Pattern)集合的一项。
+\end{definition}
+图...是一个示例SPARQL查询，其中WHERE子句是查询的主要组成部分，包含6个基本的三元组模式(triple pattern)，其中三元组模式通过
+对RDF三元组中的主体，属性或客体进行变量替换得到。
+
+SPARQL查询过程 中,用户(包括人和机器)通过一系列接口与系统进行交互，接口将查询请求送入
+SPARQL查询处理器，调用底层的RDF存储获取相关的结果记录。SPARQL通过查询器扫描关键词，并且根据
+标准解析查询序列验证RDF三元组的有效性。如果查询不正确，则在处理的过程中及时通过接口为用户返
+回错误信息，如图 1 所示:
+
+在 SPARQL 处理器中,首先利用解析器对查询语句进行解析,判断是否存在语法错误。接着在重写查询
+阶段,以规则为基础重新优化查询语句。最后通过执行 QEP(查询执行计划)发生器产生的计划获取 RDF 数
+据并通过接口返回给用户。
+
+\section{马尔科夫决策模型}[MDP]
+
+
 
 \section{定理和定义等}[Theorem]
 \begin{theorem}[\cite{cnproceed}]

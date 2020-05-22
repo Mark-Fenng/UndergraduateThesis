@@ -121,14 +121,27 @@ SPARQL查询过程 中,用户(包括人和机器)通过一系列接口与系统�
 总体的目标是找到一个决策策略$\pi :S\longmapsto A$（一个状态到动作的映射函数），使得期望的奖励最大化。马尔科夫决策过程是一个从交互中学习的过程，\ref{Interaction}表示出了这个交互学习过程：Agent是学习者，它在某个状态下采取动作并且与环境交互，Agent从环境中获取到下一个状态和动作对应的奖励。状态信息通常需要编码，也被称为observations。
 \begin{figure}[h]
     \centering
-    \includegraphics[width = 0.8\textwidth]{MDP}
+    \includegraphics[width = 1\textwidth]{MDP}
     \caption{马尔科夫决策学习者与环境交互过程}
     \label{Interaction}
 \end{figure}
 
 \subsection{Q学习算法}
 Q学习算法\cite{QLearning2}是由Watkins在其博士论文"Learning from delayed rewards"\cite{QLearning0}中第一次提出的，该算法是强化学习中具有里程碑意义的算法。Q学习算法是时间差分算法(TD)\cite{QLearning1}的一种，也是一种模型无关的算法，其主要针对具有折扣的奖励指标的控制。
-Q学习算法\cite{QLearning2}是由Watkins在其博士论文"Learning from delayed rewards"\cite{QLearning0}中第一次提出的，该算法是强化学习中具有里程碑意义的算法。Q学习算法是时间差分算法(TD)\cite{QLearning1}的一种，也是一种模型无关的算法，其主要针对具有折扣的奖励指标的控制。 
+Q学习算法\cite{QLearning2}是由Watkins在其博士论文"Learning from delayed rewards"\cite{QLearning0}中第一次提出的，该算法是强化学习中具有里程碑意义的算法。Q学习算法是时间差分算法(TD)\cite{QLearning1}的一种，也是一种模型无关的算法，其主要针对具有折扣的奖励指标的控制。
+
+Q学习算法在迭代时针对状态-动作对进行奖惩，Q(s,a)作为在状态s下执行动作a后获得的累计回报，即Q值函数。Q值函数取决于当前的立即回报和期望的延时回报，因此，学习系统每一次学习迭代都需要考察当前的这个动作。Q学习算法的最佳策略为当前状态s下累计回报值最大时对应的策略，即：
+\begin{equation}
+    \pi^*(s) = max Q(s,a)
+\end{equation}
+
+Q值表是所有状态-动作对与其对应的Q值组成的一张二维表，每次迭代，这张表的值就更新一次。在学习的过程中，通过不断更新Q值表中状态-动作对所对应的Q值，从而对Q值表进行更新。随着学习次数的增加，Q值表逐渐趋于稳定，即收敛。学习系统在之后做决策的时候，根据Q学习算法学习到的Q值表（经验）做出决策，同时，针对新变化的状态留有一定的学习余地，使得Q学习算法更适用于动态变化的环境。
+
+在t时刻，当前环境的状态为$s_t$，学习者选择了动作$a_i$，并且执行这个动作，经过与环境的交互，学习者的状态由$s_t$变成了$s_{t+1}$，并且环境反馈给学习者一个反馈值$r$，算法根据公式\ref{QValue}\ref{RLIntroduction}更新Q值表：
+\begin{equation}
+    \label{QValue}
+    Q(s_t,a_i)=(1-\alpha)*Q(s_t,a_i)+\alpha *[r(s_t,a_i)+\gamma *maxQ(s_{t+1},a)]
+\end{equation}
 
 % Local Variables:
 % TeX-master: "../main"

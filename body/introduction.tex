@@ -241,9 +241,23 @@ Jena具体的接口和功能主要有：
     \label{Jena}
 \end{figure}
 
-\subsection{本章小结}[summary]
+\section{本章小结}[summary]
 在这一章中，我们主要对本文中使用到的基础技术进行了详细的介绍。我们首先介绍了RDF图模型的定义，包括几个重要名词解释和形式化的定义，还介绍了SPARQL查询语言的定义、语法、查询的构成和查询的执行过程，这两个都是本文后续研究的重要对象。之后，又介绍了强化学习的基本概念，马尔科夫决策过程及本文后续要用到的Q学习算法和深度Q学习网络算法。最后，我们还介绍了图数据库中最常用的Jena框架，包括其模块架构和功能。在下一章中，我们将介绍如何使用强化学习来对SPARQL查询过程进行优化。
 
+\chapter{基于强化学习的SPARQL查询优化算法}[RL based SPARQL Optimizer]
+在本章中，我们将从马尔科夫决策模型的定义开始，介绍如何定义状态，动作，奖励等要素以及其编码方式，然后详细描述两种强化学习算法的具体实现。
+
+\section{基本图模式的优化空间}[BGP]
+
+
+\section{马尔科夫决策过程定义和编码}[MDP]
+在第二章预备知识中我们介绍过，一个马尔科夫决策过程可以形式化的表示为五元组\ref{MDP5}，所以在本小节中，我们将依次介绍每一个元素在此优化方法中的具体定义。
+\subsection{状态的定义和编码}[state]
+\subsection{动作的定义和编码}[action]
+\subsection{奖励定义}[reward]
+\section{强化学习算法实现}[RL]
+\subsection{Q学习算法实现}[QLearning]
+\subsection{DQN算法实现}[DQN]
 % Local Variables:
 % TeX-master: "../main"
 % TeX-engine: xetex

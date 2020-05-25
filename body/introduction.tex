@@ -75,11 +75,19 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
 \section{SPARQL语言与查询过程}
 
 SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数据的形式化查询语言，也是目前使用最广泛的查询语言。类似于SQL，SPARQL支持多种查询格式，例如SELECT、ASK、DESCRIBE、CONSTRUCT。其中,SELECT查询格式用于标准查询,以标准的 SPARQL XML 结果格式返回查询结果。ASK 查询返回结果是 yes 或 no,没有具体内容。DESCRIBE 用于提取本体和实例数据的一部分,返回一个图形,其中包含和图形模式匹配的节点的相关信息。
-\begin{definition}[（三元组模式）]    
-    一个三元组模式(Triple Pattern)是集合$(RDF-T \bigcup V)X(I \bigcup V)X(RDF-T \bigcup V)$的一项，其中V代表变量。
+\begin{definition}[（三元组模式）] 
+    \label{Triple}   
+    一个三元组模式(Triple Pattern)是集合$(RDF-T \bigcup V)X(I \bigcup V)X(RDF-T \bigcup V)$的一项，其中V代表变量。三元组模式常用$(s,p,o)$来表示。
 \end{definition}
 \begin{definition}[基本图模式(BGP)]    
-    一个三元组模式(Triple Pattern)是三元组模式(Triple Pattern)集合的一项。
+    \label{BGP}
+    一个基本图模式是$$\wedge_{1\leqslant i\leqslant m}(s_i,p_i,o_i)$$
+    其中
+    \begin{enumerate}
+        \item $(s_i,p_i,o_i)$是一个三元组模式$(1 \leqslant  i \leqslant m)$。
+        \item $\wedge$表示逻辑合取。
+    \end{enumerate}
+    
 \end{definition}
 图...是一个示例SPARQL查询，其中WHERE子句是查询的主要组成部分，包含6个基本的三元组模式(triple pattern)，其中三元组模式通过对RDF三元组中的主体，属性或客体进行变量替换得到。
 
@@ -247,7 +255,23 @@ Jena具体的接口和功能主要有：
 \chapter{基于强化学习的SPARQL查询优化算法}[RL based SPARQL Optimizer]
 在本章中，我们将从马尔科夫决策模型的定义开始，介绍如何定义状态，动作，奖励等要素以及其编码方式，然后详细描述两种强化学习算法的具体实现。
 
-\section{基本图模式的优化空间}[BGP]
+\section{优化问题定义}[BGP]
+SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查询和分析性查询这三个大类型，但是最常见最常用的查询是图模式匹配查询。在图模式匹配查询中，基本图模式匹配查询(BGP)又是核心。在如下SPARQL查询语句\ref{sparql1}中:
+\begin{lstlisting}[caption={SPARQL查询语句},label={sparql1}]
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+    SELECT ?X ?Y ?Z
+    WHERE
+    {
+        ?X rdf:type ub:GraduateStudent .  ------T1
+        ?Y rdf:type ub:University .       ------T2
+        ?Z rdf:type ub:Department .       ------T3
+        ?X ub:memberOf ?Z .               ------T4
+        ?Z ub:subOrganizationOf ?Y .      ------T5
+        ?X ub:undergraduateDegreeFrom ?Y  ------T6
+    }
+\end{lstlisting}
+根据定义\ref{Triple}，$T_1$到$T_6$是6个三元组模式，根据定义\ref{BGP}，$T_1\wedge T_2\wedge T_3\wedge T_4\wedge T_5\wedge T_6$是一个基本图模式(BGP)。
 
 
 \section{马尔科夫决策过程定义和编码}[MDP]

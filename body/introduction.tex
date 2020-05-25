@@ -255,7 +255,7 @@ Jena具体的接口和功能主要有：
 \chapter{基于强化学习的SPARQL查询优化算法}[RL based SPARQL Optimizer]
 在本章中，我们将从马尔科夫决策模型的定义开始，介绍如何定义状态，动作，奖励等要素以及其编码方式，然后详细描述两种强化学习算法的具体实现。
 
-\section{优化问题定义}[BGP]
+\section{优化问题描述}[BGP]
 SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查询和分析性查询这三个大类型，但是最常见最常用的查询是图模式匹配查询。在图模式匹配查询中，基本图模式匹配查询(BGP)又是核心。在如下SPARQL查询语句\ref{sparql1}中:
 \begin{lstlisting}[caption={SPARQL查询语句},label={sparql1}]
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -264,15 +264,74 @@ SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查�
     WHERE
     {
         ?X rdf:type ub:GraduateStudent .  ------T1
-        ?Y rdf:type ub:University .       ------T2
+        ?X ub:memberOf ?Z .               ------T2
         ?Z rdf:type ub:Department .       ------T3
-        ?X ub:memberOf ?Z .               ------T4
-        ?Z ub:subOrganizationOf ?Y .      ------T5
+        ?Z ub:subOrganizationOf ?Y .      ------T4
+        ?Y rdf:type ub:University .       ------T5        
         ?X ub:undergraduateDegreeFrom ?Y  ------T6
     }
 \end{lstlisting}
 根据定义\ref{Triple}，$T_1$到$T_6$是6个三元组模式，根据定义\ref{BGP}，$T_1\wedge T_2\wedge T_3\wedge T_4\wedge T_5\wedge T_6$是一个基本图模式(BGP)。
 
+对三元组模式$T_1$的查询结果是如下表\ref{T1}的中间结果：
+\begin{table}[htbp]
+    \caption[table1]{三元组模式$T_1$的查询中间结果}
+    \label{T1}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{|c|c|c|}
+    \toprule[1.5pt]
+    $?X$ & rdf:type & ub:GraduateStudent\\
+    \midrule[1pt]
+    Department14.University2.GraduateStudent101 & rdf:type & ub:GraduateStudent\\
+    Department8.University2.GraduateStudent61 & rdf:type &ub:GraduateStudent\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
+三元组模式$T_1$的语义是查询类型是研究生(graduate student)的全部实体。在中间结果表格中，变量$?X$表示的结果是复合条件的全部学生实体的URI。
+
+对三元组模式$T_2$的查询结果是如下表\ref{T2}的中间结果，
+\begin{table}[htbp]
+    \caption[table1]{三元组模式$T_2$的查询中间结果}
+    \label{T2}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{|c|c|c|}
+    \toprule[1.5pt]
+    $?X$ & ub:memberOf & $?Z$\\
+    \midrule[1pt]
+    Department15.University2.UndergraduateStudent242 & ub:memberOf &Department15.University2\\
+    Department14.University2.GraduateStudent101 & ub:memberOf & Department14.University2\\
+    Department8.University2.GraduateStudent61 & ub:memberOf &Department8.University2\\    
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
+三元组模式$T_2$的语义是查询$?X$是$?Z$的成员的模式。在中间结果表格中，变量$?X$表示的结果是符合条件的全部学生实体的URI，变量$?Z$表示的结果是所有组织实体的URI，可以看到与表格\ref{T1}中表格中$?X$全是研究生(graduate student)结果不同的是，表格\ref{T2}的第一行出现了本科生(undergraduate student \#242)。
+
+在图数据库处理该SPARQL查询时，会先查询得到三元组模式$T_1$的中间结果\ref{T1}，然后再查询得到三元组模式$T_2$的中间结果\ref{T2}，之后会将两个中间结果进行连接操作，从而得到新的中间结果如下表\ref{MidResult}所示：
+\begin{table}[htbp]
+    \caption[table1]{三元组模式$T_1$与$T_2$连接操作后的中间结果}
+    \label{MidResult}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{|c|c|c|}
+    \toprule[1.5pt]
+    $?X$ & ub:memberOf & $?Z$\\
+    \midrule[1pt]
+    Department14.University2.GraduateStudent101 & ub:memberOf & Department14.University2\\
+    Department8.University2.GraduateStudent61 & ub:memberOf &Department8.University2\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
+
+从$T_1 \Join T_2 $以此类推，当最后完成$T_1 \Join T_2 \Join T_3 \Join T_4 \Join T_5 \Join T_6$后，将得到SPARQL查询\ref{sparql1}的最终结果。
+
+这6个三元组模式的连接顺序将会对中间结果的大小以及查询所需时间产生巨大的影响。例如，在相同实验环境和相同的数据集规模下，使用连接顺序1：$T_1 \Join T_3 \Join T_2 \Join T_5 \Join T_4 \Join T_6$所需的查询时间实测为6.64s，而使用连接顺序2：$T_3 \Join T_2 \Join T_6 \Join T_4 \Join T_5 \Join T_1$所需的查询时间实测为0.67s，查询时间对比图如图\ref{SequenceTime}所示。由此可见，在基本图模式(BGP)中的三元组模式的连接顺序具有非常大的优化空间，好的连接顺序将比差的连接顺序效率提升9倍左右。
+
+此优化问题的输入为SPARQL查询中的基本图模式(BGP)，例如：$T_1\wedge T_2\wedge T_3\wedge T_4\wedge T_5\wedge T_6$；输出为一个优化后的三元组模式连接顺序，例如：$T_3 \Join T_2 \Join T_6 \Join T_4 \Join T_5 \Join T_1$。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 1\textwidth]{SequenceTime}
+    \caption{不同连接顺序所用查询时间}
+    \label{SequenceTime}
+\end{figure}
 
 \section{马尔科夫决策过程定义和编码}[MDP]
 在第二章预备知识中我们介绍过，一个马尔科夫决策过程可以形式化的表示为五元组\ref{MDP5}，所以在本小节中，我们将依次介绍每一个元素在此优化方法中的具体定义。

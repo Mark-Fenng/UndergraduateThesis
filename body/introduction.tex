@@ -225,6 +225,13 @@ DQN算法见伪代码\ref{DQN伪代码}：
 Apache Jena（简写为Jena）是一个免费的开源Java框架，是一个用于构建语义网络和链接数据的应用程序。Jena最初是英国布里斯托尔的HP Labs的研究人员在2000年开发的，并且在2010年称为apache软件基金会的开源项目。Jena一直是一个开源项目，并且已广泛用于各种语义网络应用程序中。
 
 Jena框架由多个不同的API组成，它们相互交互来处理RDF数据。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 1\textwidth]{Jena}
+    \caption{jena框架}
+    \label{Jena}
+\end{figure}
+其架构结构如图\ref{Jena}所示。
 
 Jena具体的接口和功能主要有：
 \begin{enumerate}
@@ -240,14 +247,6 @@ Jena具体的接口和功能主要有：
     \end{enumerate}
     \item 服务机制。Jena提供了Fuseki，它是一个SPARQL服务器。它可以作为操作系统，Java Web应用程序和独立服务器运行。它提供了安全性方面的保障机制(Apache Shiro)，并具有用于服务器监视和管理的用户界面。
 \end{enumerate}
-其架构结构如图\ref{Jena}所示。
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width = 1\textwidth]{Jena}
-    \caption{jena框架}
-    \label{Jena}
-\end{figure}
 
 \section{本章小结}[summary]
 在这一章中，我们主要对本文中使用到的基础技术进行了详细的介绍。我们首先介绍了RDF图模型的定义，包括几个重要名词解释和形式化的定义，还介绍了SPARQL查询语言的定义、语法、查询的构成和查询的执行过程，这两个都是本文后续研究的重要对象。之后，又介绍了强化学习的基本概念，马尔科夫决策过程及本文后续要用到的Q学习算法和深度Q学习网络算法。最后，我们还介绍了图数据库中最常用的Jena框架，包括其模块架构和功能。在下一章中，我们将介绍如何使用强化学习来对SPARQL查询过程进行优化。
@@ -334,8 +333,10 @@ SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查�
 \end{figure}
 
 \section{马尔科夫决策过程定义和编码}[MDP]
-在第二章预备知识中我们介绍过，一个马尔科夫决策过程可以形式化的表示为五元组\ref{MDP5}，所以在本小节中，我们将依次介绍每一个元素在此优化方法中的具体定义。
+在第二章预备知识中我们介绍过，一个马尔科夫决策过程可以形式化的表示为五元组\ref{MDP5}，所以在本小节中，我们将依次介绍每一个元素在此优化方法中的具体定义，之后再根据定义给出其相应的编码方式以便于计算机的识别和处理。
 \subsection{状态的定义和编码}[state]
+$S$代表Agent所有可能的状态，对任意时刻$t$的状态$S_t$都满足$S_t \in S$。
+在我们的优化问题中，我们用$S_t$来表示在t时刻基本图模式(BGP)的连接状态。
 \subsection{动作的定义和编码}[action]
 \subsection{奖励定义}[reward]
 \section{强化学习算法实现}[RL]

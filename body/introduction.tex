@@ -67,7 +67,7 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
 
 \begin{definition}[（RDF三元组）]    
     RDF三元组是形如(s,p,o)的数据组合，又被称为声明。其中s代表主体(subject)，p代表属性(property),
-    o代表客体(object)。三元组的选取区间可以表示为$(I\bigcup RDF-B)X(I\bigcup RDF-B)X(I\bigcup RDF-B\bigcup RDF-L)$。
+    o代表客体(object)。三元组的选取区间可以表示为$(I\bigcup RDF-B)\times(I\bigcup RDF-B)\times(I\bigcup RDF-B\bigcup RDF-L)$。
     
     例如，对于三元组<Tony, graduateFrom, HIT>，Tony代表主体，graduateFrom(毕业于)代表属性，HIT代表客体。三元组的意思是Tony毕业于HIT。
 \end{definition}
@@ -77,7 +77,7 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
 SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数据的形式化查询语言，也是目前使用最广泛的查询语言。类似于SQL，SPARQL支持多种查询格式，例如SELECT、ASK、DESCRIBE、CONSTRUCT。其中,SELECT查询格式用于标准查询,以标准的 SPARQL XML 结果格式返回查询结果。ASK 查询返回结果是 yes 或 no,没有具体内容。DESCRIBE 用于提取本体和实例数据的一部分,返回一个图形,其中包含和图形模式匹配的节点的相关信息。
 \begin{definition}[（三元组模式）] 
     \label{Triple}   
-    一个三元组模式(Triple Pattern)是集合$(RDF-T \bigcup V)X(I \bigcup V)X(RDF-T \bigcup V)$的一项，其中V代表变量。三元组模式常用$(s,p,o)$来表示。
+    一个三元组模式(Triple Pattern)是集合$(RDF-T \bigcup V)\times(I \bigcup V)\times(RDF-T \bigcup V)$的一项，其中V代表变量。三元组模式常用$(s,p,o)$来表示。
 \end{definition}
 \begin{definition}[基本图模式(BGP)]    
     \label{BGP}
@@ -335,6 +335,7 @@ SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查�
 \section{马尔科夫决策过程定义和特征化}[MDP]
 为了能够把一个优化问题表述为一个强化学习问题，我们需要把问题形式化为一个马尔科夫决策过程(MDP)。而在第二章预备知识中，我们介绍过，一个马尔科夫决策过程可以形式化的表示为五元组\ref{MDP5}，所以在本小节中，我们将依次介绍每一个元素在此优化方法中的具体定义，举出相应的例子，之后再根据定义给出其相应的编码方式以便于计算机的识别和处理，即对每个元素进行特征化处理。
 \subsection{状态的定义和特征化}[state]
+\subsubsection{状态的定义}[definition]
 $S$代表Agent所有可能的状态，对任意时刻$t$的状态$S_t$都满足$S_t \in S$。
 在我们的优化问题中，我们用$S_t$来表示在t时刻基本图模式(BGP)的连接状态，$S_0$是初始状态，表示还没有开始做连接。
 
@@ -347,10 +348,45 @@ $S$代表Agent所有可能的状态，对任意时刻$t$的状态$S_t$都满足$
     \item 如果在$t_2$时刻，三元组模式$T_1$的查询中间结果与$T_3$的查询中间结果进行了连接操作，则此时的状态可以表示为$S_{t2} = T_1 \Join T_3$；
     \item 如果在$t_3$时刻，前面的连接中间结果又与三元组模式$T_2$的查询中间结果进行了连接操作，则此时的状态可以表示为$S_{t3} = T_1 \Join T_3 \Join T_2$；
     \item 以此类推，如果最终查询结束时，这6个三元组模式(Triple)查询中间结果的连接顺序是$T_1 \Join T_3 \Join T_2 \Join T_5 \Join T_4 \Join T_6$，则在查询处理结束的时刻$t_6$时，状态的表示为$S_{t6} = T_1 \Join T_3 \Join T_2 \Join T_5 \Join T_4 \Join T_6$。
-
 \end{enumerate}
 
+\subsubsection{特征化}[Featurization]
+在将以上描述的状态定义进行特征化时，我们面临着两个挑战：
+\begin{enumerate}
+    \item 如何将一个三元组模式表示为一个编码，如何通过编码来体现这些三元组模式中间查询结果的连接顺序；
+    \item 每一个SPARQL查询都有不同的基本图模式(BGP)，即如果有两个不同的SPARQL查询，则它们的三元组模式和总个数都不尽相同。而对于强化学习算法来说，其数据输入（状态的特征编码）的维度需要维持衡定，所以如何将个数变化的三元组模式集特征化为一个长度固定的编码是比较困难的。
+\end{enumerate}
+
+为了能够解决上面的两个问题，我们需要先介绍三元组模式的两个种类：
+\begin{enumerate}
+    \item 类型三元组模式(Type triple)。这种三元组的特征是其属性固定为Type的URI: <http://www.w3.org/1999/02/22-rdf-syntax-ns\#type>。类型三元组模式是用来描述三元组$(s,p,o)$中主体($s$)的类型是客体($o$)的一类三元组模式，其形式化表述为：$$Type\ triple \in \lbrace (RDF-T \cup V)\times RDF-Type\times (RDF-T \cup V) ) \rbrace$$ 其中$V$表示变量，$RDF-Type$代表type的URI：<http://www.w3.org/1999/02/22-rdf-syntax-ns\#type>。
+    \item 属性三元组模式(Property triple)。这种三元组是所有三元组模式中除去类型三元组后的部分。其用于表示一个三元组$(s,p,o)$中主体($s$)的某属性($p$)是客体($o$)。其形式化表述为：$$Property\ triple \in \lbrace Triple \rbrace - \lbrace Type\ triple \rbrace $$ 其中$\lbrace Triple \rbrace$表示三元组模式的集合，$\lbrace Type\ triple \rbrace$表示类型三元组模式的集合。
+\end{enumerate}
+
+例如，三元组模式$T_1$：" ?X rdf:type ub:GraduateStudent " 是一个类型三元组模式，它的查询语义是查询所有类型是研究生(Graduate)的主体(subject)。三元组模式$T_2$：" ?X ub:memberOf ?Z "是一个属性三元组模式，它的查询语义是查询所有符合主体(subject)是客体(object)的成员(member)的三元组。
+
+根据以上的定义，我们首先对输入的SPARQL查询中的三元组模式进行第一次映射。对于一个三元组模式，如果它是一个类型三元组模式，则将其映射为它的客体(subject)；如果它是一个属性三元组模式，则将其映射为它的属性(property)。这样做映射的目的是...
+
+例如，三元组模式$T_1$：" ?X rdf:type ub:GraduateStudent " 是一个类型三元组模式，所以将其映射为ub:GraduateStudent。三元组模式$T_2$：" ?X ub:memberOf ?Z "是一个属性三元组模式，所以将其映射为ub:memberOf。
+
+为了使不同的查询都能有相同长度的编码，我们需要在初始时获得整个图数据中所有的类型值和属性，即图中所有的rdf:type对应的客体值和所有的属性值，这个可以通过在导入RDF数据时进行统计和记录即可获得。然后，对于这些统计值进行简单的计数排序编码。之后将对三元组模式进行第二次映射，即将其第一次映射编码的结果转换为其对应的计数编码。
+
+例如...
 \subsection{动作的定义和特征化}[action]
+$A$表示有限动作集（动作空间），对任意时刻$t$的动作$A_t$，都满足$A_t \in A$。
+在我们的优化问题中，在某个连接状态下，所有可能的连接动作构成了有限动作集。在t时刻，其连接状态为$S_t$，则此时，所有可能的连接动作就是整个动作空间$A$，而学习者会从动作集中选择一个动作$A_i$去实际执行。
+
+以查询\ref{sparql1}为例子，这个查询中包括6个三元组模式(Triple)：$T_1, T_2, T_3, T_4, T_5, T_6$。
+
+以下过程将展示动作集和动作是如何随时间变化的：
+\begin{enumerate}
+    \item 初始时的状态$S_0=\phi$，表示所有的三元组模式都没有连接，此时，可以从剩余的6个三元组模式中任选一个开始执行实际查询，其动作集大小为6，假设学习者选择首先执行三元组模式$T_1$得到其中间查询结果，则它选择的动作是与$T_1$的中间查询结果做连接操作。
+    \item 如果在$t_1$时刻，已经得到了三元组模式$T_1$的查询中间结果，则此时的状态可以表示为$S_{t1} = T_1$； 
+    \item 如果在$t_2$时刻，三元组模式$T_1$的查询中间结果与$T_3$的查询中间结果进行了连接操作，则此时的状态可以表示为$S_{t2} = T_1 \Join T_3$；
+    \item 如果在$t_3$时刻，前面的连接中间结果又与三元组模式$T_2$的查询中间结果进行了连接操作，则此时的状态可以表示为$S_{t3} = T_1 \Join T_3 \Join T_2$；
+    \item 以此类推，如果最终查询结束时，这6个三元组模式(Triple)查询中间结果的连接顺序是$T_1 \Join T_3 \Join T_2 \Join T_5 \Join T_4 \Join T_6$，则在查询处理结束的时刻$t_6$时，状态的表示为$S_{t6} = T_1 \Join T_3 \Join T_2 \Join T_5 \Join T_4 \Join T_6$。
+\end{enumerate}
+
 \subsection{奖励定义}[reward]
 \section{强化学习算法实现}[RL]
 \subsection{Q学习算法实现}[QLearning]

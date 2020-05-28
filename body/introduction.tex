@@ -93,7 +93,7 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
     <student4,takeCourse,course1>\\
     <student4,takeCourse,course4>\\
     <student4,email."xx@edu.com">\\
-    <teacher1,teacherOf,course>\\
+    <teacher1,teacherOf,course4>\\
     \bottomrule[1.5pt]
     \end{tabular}
 \end{table}
@@ -416,10 +416,72 @@ $S$代表Agent所有可能的状态，对任意时刻$t$的状态$S_t$都满足$
 
 在获得映射的结果后，我们将每一个映射结果都作为一个单独的特征位，用一个二进制位来表示，0表示该三元组模式的中间查询结果还未被连接，1表示该三元组模式的中间查询结果已经被连接。但是这样还是无法解决不同的基本图模式在特征化后得到的向量维度不统一问题。为了解决这个问题，我们需要在查询优化系统初始化时，就确定好特征化结果的向量维度，将所有查询中可能出现的三元组模式映射结果都罗列出来，形成一个三元组模式映射结果全集M，然后将它们特征化为一个one-hot向量，这个向量的长度是全集M的大小。这样在之后的查询中，每个查询的三元组模式都会是初始时的三元组模式全集M的子集，这样每个查询的特征化结果就都可以变成一个定长向量了。
 
-我们为了在系统初始化时刻获取三元组模式映射结果全集M，需要在系统导入RDF数据时，对导入的数据进行统计。对导入的每一条RDF数据按照映射规则\ref{mapP}和\ref{mapT}进行映射处理，然后收集所有的映射结果形成全集M。
+我们为了在系统初始化时刻获取三元组模式映射结果全集M，需要在系统导入RDF数据时，对导入的数据进行统计。对导入的每一条RDF数据按照映射规则\ref{mapP}和\ref{mapT}进行映射处理，然后收集所有的映射结果形成全集M。算法伪代码见算法\ref{statistics}。
+\begin{algorithm}[ht]
+    \caption{统计三元组模式映射结果算法}
+    \label{statistics}    
+    \KwIn{RDF三元组 T} 
+    \KwOut{类型三元组模式映射结果全集MT，属性三元组模式映射结果全集MP} 
+    初始化类型三元组映射结果集合MT=$\phi $\;
+    初始化属性三元组映射结果集合MP=$\phi $\;
+    \For{triple$(s_i,p_i,o_i)$ in T}  
+    {
+        \If{triple是类型三元组 and $o_i$不在集合MT中}
+        {
+            将$o_i$加入到集合MT中\;
+        }
+        \ElseIf{triple是属性三元组 and $p_i$不在集合MP中}
+        {
+            将$p_i$加入到集合MP中\;
+        }
+    }
+\end{algorithm} 
 
-例如，在系统开始时导入了如表所示的RDF数据，则在导入时，进行如下操作
+\begin{table}[htbp]
+    \caption[table1]{RDF数据}
+    \label{RDF2}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{|c|c|}
+    \toprule[1.5pt]
+    RDF三元组& 类型\\
+    \midrule[1pt]    
+    <student1,rdf:type,GraduateStudent>&类型三元组\\
+    <university0,rdf:type,University>&类型三元组\\
+    <student1,takesCourse,course1>&属性三元组\\
+    <student1,memberOf,department>&属性三元组\\
+    <course1,rdf:type,Course>&类型三元组\\
+    <department1,rdf:type,Department>&类型三元组\\
+    <department1,subOrganizationOf,university0>&属性三元组\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
 
+例如，在系统开始时导入了如表格\ref{RDF2}所示的RDF数据，则在导入时，进行如下统计操作：初始时，集合MT和MP都是空的，在导入三元组<student1,rdf:type,GraduateStudent>时，由于它是类型三元组，根据映射规则\ref{mapT}，将GraduateStudent加入到集合MT中；三元组<university0,rdf:type,University>是类型三元组，则将University加入到集合MT中；三元组<student1,takesCourse,course1>是属性三元组，根据映射规则\ref{mapP}，将takeCourse加入到集合MP中；三元组<student1,memberOf,department>是属性三元组，则将memberOf加入到集合MP中；三元组<course1,rdf:type,Course>是类型三元组，则将Course加入到集合MT中；三元组<department1,rdf:type,Department>是类型三元组，则将Department加入到集合MT中；三元组<department1,subOrganizationOf,university0>是属性三元组，则将subOrganizationOf加入到集合MP中。
+
+在获得三元组映射结果全集后，将集合中的元素做如下特征化：
+\begin{table}[htbp]    
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{ccccccc}
+    \toprule[1.5pt]
+    GraduateStudent& University&Course&Department&takesCourse&memberOf&subOrganizationOf\\
+    \midrule[1pt]    
+    0&0&0&0&0&0&0\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
+
+因为向量中所有二进制位都是0，所以此时以上编码状态处于初始状态$S_0$。
+对于在$t_3$时刻，状态为$S_{t3} = T_1 \Join T_3 \Join T_2$，即三元组模式$T_1,T_2,T_3$的中间查询结果已经被连接，这三个三元组模式的映射结果GraduateStudent,memberOf,Department对应的特征位将被设置为1，其特征向量如下：
+\begin{table}[htbp]    
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{ccccccc}
+    \toprule[1.5pt]
+    GraduateStudent& University&Course&Department&takesCourse&memberOf&subOrganizationOf\\
+    \midrule[1pt]    
+    1&0&0&1&0&1&0\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
 
 \subsection{动作的定义和特征化}[action]
 $A$表示有限动作集（动作空间），对任意时刻$t$的动作$A_t$，都满足$A_t \in A$。
@@ -435,7 +497,7 @@ $A$表示有限动作集（动作空间），对任意时刻$t$的动作$A_t$，
     \item 如果在$t_3$时刻，连接状态为$S_{t3} = T_1 \Join T_3 \Join T_2$，此时，可以从剩余的3个三元组模式中间结果$T_4,T_5,T_6$中任选一个进行连接操作，动作集大小为3，假设学习者选择与$T_5$的查询中间结果进行连接操作，这个动作的编码就是三元组模式$T_5$的编号5。
     \item 以此类推，在每个状态下，选择从动作集中选择一个动作执行，直到最后的状态是所有的三元组模式的中间结果都得到连接，即得到了最终的查询结果为止。
 \end{enumerate}
-
+状态转换的规则是在一个状态$S_t$下，如果学习者选择了动作$a_i$，则将状态$S_t$的编码中三元组模式$T_i$对应的特征位置1，状态由$S_t$转换成了状态$S_{t+1}$。
 \subsection{奖励定义}[reward]
 \section{强化学习算法实现}[RL]
 \subsection{Q学习算法实现}[QLearning]

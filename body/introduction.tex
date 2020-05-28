@@ -56,7 +56,7 @@ Marcus等人也将深度强化学习应用于查询优化中，提出了一个�
 \section{RDF图模型}
 
 RDF全称为资源描述框架(resource description framework)，是万维网联盟(World Wide Web consortium，简称W3C)制定的在语义Web（semantic Web）上表示和交换机器可理解
-(machine-understandable)信息的标准数据模型[23]。在互联网中，所有能够用RDF数据表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id；图...
+(machine-understandable)信息的标准数据模型[23]。在互联网中，所有能够用RDF数据表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id。
 
  \begin{definition}[RDF项(RDF Term)]    
     用I来表示IRI的集合
@@ -71,6 +71,42 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
     
     例如，对于三元组<Tony, graduateFrom, HIT>，Tony代表主体，graduateFrom(毕业于)代表属性，HIT代表客体。三元组的意思是Tony毕业于HIT。
 \end{definition}
+
+\begin{table}[htbp]
+    \caption[table1]{RDF数据}
+    \label{RDF1}
+    \vspace{0.5em}\centering\wuhao
+    \begin{tabular}{|c|}
+    \toprule[1.5pt]
+    RDF三元组\\
+    \midrule[1pt]    
+    <student1,rdf:type,Student>\\
+    <student1,telephone,"xxx-xxxx-xxxx">\\
+    <student1,takesCourse,course1>\\
+    <student1,memberOf,department>\\
+    <student1,advisor,teacher2>\\
+    <course1,rdf:type,Course>\\
+    <teacher2,teacherOf,course1>\\
+    <teacher2,teacherOf,course3>\\
+    <teacher2,worksFor,department1>\\
+    <department1,subOrganizationOf,university0>\\
+    <student4,takeCourse,course1>\\
+    <student4,takeCourse,course4>\\
+    <student4,email."xx@edu.com">\\
+    <teacher1,teacherOf,course>\\
+    \bottomrule[1.5pt]
+    \end{tabular}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 1\textwidth]{RDF}
+    \caption{RDF图模型}
+    \label{RDFPhoto}
+\end{figure}
+
+表格\ref{RDF1}是一个包含14个RDF三元组的数据集，图\ref{RDFPhoto}是表格\ref{RDF1}RDF数据对应的图模型表示，其中方框表示实体，双引号中的数值表示属性值，图上的边表示属性值。
+
 
 \section{SPARQL语言与查询过程}
 
@@ -382,7 +418,9 @@ $S$代表Agent所有可能的状态，对任意时刻$t$的状态$S_t$都满足$
 
 我们为了在系统初始化时刻获取三元组模式映射结果全集M，需要在系统导入RDF数据时，对导入的数据进行统计。对导入的每一条RDF数据按照映射规则\ref{mapP}和\ref{mapT}进行映射处理，然后收集所有的映射结果形成全集M。
 
-例如...
+例如，在系统开始时导入了如表所示的RDF数据，则在导入时，进行如下操作
+
+
 \subsection{动作的定义和特征化}[action]
 $A$表示有限动作集（动作空间），对任意时刻$t$的动作$A_t$，都满足$A_t \in A$。
 在我们的优化问题中，在某个连接状态下，所有可能的连接动作构成了有限动作集。在t时刻，其连接状态为$S_t$，则此时，所有可能的连接动作就是整个动作空间$A$，而学习者会从动作集中选择一个动作$A_i$去实际执行。动作以选择连接的三元组模式中间结果的编号作为编码。

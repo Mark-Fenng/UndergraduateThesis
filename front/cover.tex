@@ -53,38 +53,19 @@
   estudenttype={Master of Art},
   %
   % 关键词用“英文逗号”分割
-  ckeywords={\TeX, \LaTeX, CJK, 嗨！, thesis},
-  ekeywords={\TeX, \LaTeX, CJK, template, thesis},
+  ckeywords={SPARQL查询优化,强化学习,马尔可夫决策过程，基本图模式,jena},
+  ekeywords={SPARQL query optimization,Reinforcement learning,MDP,Basic graph pattern,Jena},
 }
 
 \begin{cabstract}
+随着知识图谱的广泛使用和RDF数据规模的不断增大，对SPARQL查询效率不断提出更高的要求，所以SPARQL的查询优化一直是研究的热点。近年来，人工智能技术在关系型数据库中得到了大量的研究和应用，为SQL的查询效率带来了显著的提升，然而基于人工智能的SPARQL查询优化却一直没有得到研究，所以本文旨在使用强化学习技术来优化SPARQL查询，来实现传统优化方法无法达到的优化效果。
 
-摘要的字数（以汉字计），硕士学位论文一般为500 $\sim$ 1000字，博士学位论文为1000 $\sim$ 2000字，
-均以能将规定内容阐述清楚为原则，文字要精练，段落衔接要流畅。摘要页不需写出论文题目。
-英文摘要与中文摘要的内容应完全一致，在语法、用词上应准确无误，语言简练通顺。
-留学生的英文版博士学位论文中应有不少于3000字的“详细中文摘要”。
+本文针对SPARQL查询中的基本图模式，使用强化学习方法来优化其中三元组模式的连接顺序。本文将强化学习问题转换为马尔可夫决策过程(MDP)，定义了马尔可夫决策过程的五元组(状态，动作，策略，奖励，初始状态)，使用了创新的方法对状态和动作进行特征化，并提出了奖励的计算方法。本文基于Jena图数据库，使用自己实现的优化模块对其中的基本图模式优化模块进行替换，对强化学习模型进行了训练和改进，最后使用LUBM标准数据集和查询集对本文的优化方法进行了有效性测试。
 
-  关键词是为了文献标引工作、用以表示全文主要内容信息的单词或术语。关键词不超过 5
-  个，每个关键词中间用分号分隔。（模板作者注：关键词分隔符不用考虑，模板会自动处
-  理。英文关键词同理。）
 \end{cabstract}
 
 \begin{eabstract}
-   An abstract of a dissertation is a summary and extraction of research work
-   and contributions. Included in an abstract should be description of research
-   topic and research objective, brief introduction to methodology and research
-   process, and summarization of conclusion and contributions of the
-   research. An abstract should be characterized by independence and clarity and
-   carry identical information with the dissertation. It should be such that the
-   general idea and major contributions of the dissertation are conveyed without
-   reading the dissertation.
-
-   An abstract should be concise and to the point. It is a misunderstanding to
-   make an abstract an outline of the dissertation and words ``the first
-   chapter'', ``the second chapter'' and the like should be avoided in the
-   abstract.
-
-   Key words are terms used in a dissertation for indexing, reflecting core
-   information of the dissertation. An abstract may contain a maximum of 5 key
-   words, with semi-colons used in between to separate one another.
+    With the widespread application of knowledge graphs and the increasing scale of RDF data, the industry continues to raise higher requirements on SPARQL query efficiency. Hence, SPARQL query optimization has always been a research hot spot. In recent years, artificial intelligence technology has been widely researched and applied in relational databases, which has brought significant improvement in SQL query efficiency. However, SPARQL query optimization based on artificial intelligence has not been researched. This article aims to use Reinforcement Learning to optimize SPARQL queries and achieve great optimization effect that traditional optimization methods can't do. 
+    
+    In this paper, for the basic graph pattern(BGP) in SPARQL query, the reinforcement learning method is used to optimize the join order of the triple patterns. This paper converts the reinforcement learning problem to a Markov decision process (MDP) and defines the five-tuple(state, action, policy, reward, initial state) of MDP. The paper uses innovative methods to encode state and action, and proposes a method of calculating rewards. Based on the Jena graph database, this article uses the optimization module implemented by myself to replace Jena's original BGP optimization module, trains and improves the reinforcement learning model. Finally, I use the LUBM standard data set and query set to test the effectiveness of the optimization method raised in this paper.
 \end{eabstract}

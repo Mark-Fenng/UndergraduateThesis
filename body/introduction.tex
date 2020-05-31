@@ -122,21 +122,15 @@ Marcus等人也将深度强化学习应用于查询优化中，提出了一个�
     
 \end{definition}
 
-\begin{lstlisting}[caption={SPARQL查询语句示例},label={sparql-example}]
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
-    SELECT ?X ?Y ?Z
-    WHERE
-    {
-        ?X rdf:type ub:GraduateStudent .  ------T1
-        ?X ub:memberOf ?Z .               ------T2
-        ?Z rdf:type ub:Department .       ------T3
-        ?Z ub:subOrganizationOf ?Y .      ------T4
-        ?Y rdf:type ub:University .       ------T5        
-        ?X ub:undergraduateDegreeFrom ?Y  ------T6
-    }
-\end{lstlisting}
-查询\ref{sparql-example}是一个示例SPARQL查询，其中“?”加字母表示变量，WHERE子句是查询的主要组成部分，包含6个三元组模式(triple pattern)，其中的三元组模式是用变量替换RDF三元组中的主体(subject)，属性(property)或客体(object)而成的。Prefix表示前缀定义，用于替换三元组模式中的相同字符串内容，用于提升SPARQL查询的可读性，类似于其他编程语言中的常量定义。
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 1\textwidth]{sparql-example}
+    \caption{SPARQL查询示例}
+    \label{sparql-example}
+\end{figure}
+~\\
+
+如图\ref{sparql-example}是一个示例SPARQL查询，其中“?”加字母表示变量，WHERE子句是查询的主要组成部分，包含6个三元组模式(triple pattern)，其中的三元组模式是用变量替换RDF三元组中的主体(subject)，属性(property)或客体(object)而成的。Prefix表示前缀定义，用于替换三元组模式中的相同字符串内容，用于提升SPARQL查询的可读性，类似于其他编程语言中的常量定义。
 
 如图\ref{SPARQL查询过程}是一个普遍的SPARQL查询处理器模块图。首先，用户通过接口与查询处理器进行交互，用户通过接口向处理器发出一个SPARQL查询请求，在SPARQL处理器接收到用户的SPARQL查询请求时，它会利用解析器对查询语句进行解析，包括词法和语法分析，如果分析过程中发现了错误，则会通过交互接口给用户反馈错误信息。之后，处理器会进入查询重写阶段，它根据一些优化规则对查询进行分析，重写成优化的查询，查询计划生成器会将优化后的查询转换成具体的物理查询计划，最后查询计划会交给RDF底层存储来执行，生成最终的查询结果并返回给用户。
 \begin{figure}[h]
@@ -292,19 +286,13 @@ Jena具体的接口和功能主要有：
 在本章中，我们先从优化问题的描述开始，定义优化问题的输入输出，然后在介绍马尔可夫决策模型的定义，描述如何定义状态，动作，奖励等要素以及其编码方式。
 
 \section{优化问题描述}[BGP]
-SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查询和分析性查询这三个大类型，但是最常见最常用的查询是图模式匹配查询。在图模式匹配查询中，基本图模式匹配查询(BGP)又是核心。在如下SPARQL查询语句\ref{sparql1}中:
-\begin{lstlisting}[caption={SPARQL查询语句示例},label={sparql1}]
-    SELECT ?X ?Y ?Z
-    WHERE
-    {
-        ?X rdf:type ub:GraduateStudent .  ------T1
-        ?X ub:memberOf ?Z .               ------T2
-        ?Z rdf:type ub:Department .       ------T3
-        ?Z ub:subOrganizationOf ?Y .      ------T4
-        ?Y rdf:type ub:University .       ------T5        
-        ?X ub:undergraduateDegreeFrom ?Y  ------T6
-    }
-\end{lstlisting}
+SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查询和分析性查询这三个大类型，但是最常见最常用的查询是图模式匹配查询。在图模式匹配查询中，基本图模式匹配查询(BGP)又是核心。在如图\ref{sparql1}的SPARQL查询语句中，
+\begin{figure}[h]
+    \centering
+    \includegraphics[width = 1\textwidth]{sparql1}
+    \caption{SPARQL查询示例}
+    \label{sparql1}
+\end{figure}
 根据定义\ref{Triple}，$T_1$到$T_6$是6个三元组模式，根据定义\ref{BGP}，$T_1\wedge T_2\wedge T_3\wedge T_4\wedge T_5\wedge T_6$是一个基本图模式(BGP)。
 
 假设在某个RDF数据集中，对三元组模式$T_1$的查询结果是表\ref{T1}的中间结果，

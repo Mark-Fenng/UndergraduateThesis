@@ -2,14 +2,14 @@
 
 \chapter{绪论}[Introduction]
 
-\section{课题背景及研究的目的和意义}[Background]
+\section{课题的背景和研究的目的与意义}[Background]
 知识图谱作为人工智能的重要基石，近些年得到了不断的发展和应用。特别是搜索引擎开始利用知识图谱来改进搜索的质量，加快搜索的速度，并且实现语义搜索和推理。
 
-知识图谱是由语义表示的网络，它能够帮助使用者搜索知识网络中的所有知识。知识网络是由许多个实体，属性和属性值构成的。有全局唯一的标识符URI来表示一个实体，属性是用来描述实体的内在特性或实体之间的关联关系。W3C提出了一种资源描述框架RDF\cite{rdf}来表示知识图谱网络，一条知识表示为一个SPO三元组(Subject,Predicate,Object)。如果从图的角度来看RDF数据的话，RDF的实体或属性值是图的顶点，RDF的属性是图的边。为了方便RDF数据的检索，W3C组织还提出了一种类似于SQL的形式化查询语言SPARQL\cite{sparql}。SPARQL查询的基本单位是三元组模式(triple pattern)，多个三元组模式通过多种运算符形成更多复杂的图模式。SPARQL查询是将查询问题转化为图上的子图匹配问题，因为这一过程可以看作在RDF图中找到全部满足查询图模式的匹配。
+知识图谱是由语义表示的网络，它能够帮助使用者搜索知识网络中的所有知识。知识网络是由许多个实体，属性和属性值构成的。它用全局唯一的标识符URI去代表一个实体，用属性来表现实体之间的关联关系或实体的内在特性。W3C提出了一种资源描述框架RDF\cite{rdf}来表示知识图谱网络。在RDF中，一条知识可以表示为一个SPO三元组（主体，属性，客体）。我们从图的角度来看RDF数据的话，RDF的实体或属性值是图的顶点，RDF的属性是图的边。为了方便RDF数据的检索，W3C组织还提出了一种形式化查询语言SPARQL\cite{sparql}，这是一种类似于SQL的查询语言。SPARQL查询以三元组模式(triple pattern)为基本单位，三元组模式之间通过多种运算符形成更多复杂的图模式。SPARQL查询是将查询问题转化为图上的子图匹配问题，因为这一过程可以看作在RDF图中找到全部满足查询图模式的匹配。
 
-随着知识图谱应用的广泛使用，到目前为止，规模为百万顶点($10^6$)和上亿条边($10^8$)的知识图谱数据集已经比较常见\cite{MassiveData}，链接开放数据2018年8月发布的LOD云图中很多知识图谱数据集规模超过10亿条三元组。例如，维基百科知识图谱DBpedia(>30亿条)、地理信息知识图谱LinkedGeoData(>30亿条)和蛋白质知识图谱UniProt(>130亿条)等。在数据量如此巨大的情况下，实际应用场景对图数据库的查询性能提出了更高的要求。在此情况下，业界对图数据库性能的优化，尤其是对SPARQL的查询优化显得尤为重要。
+随着知识图谱应用的广泛使用，到目前为止，已经出现了很多百万规模顶点($10^6$)和上亿条边($10^8$)的知识图谱数据集\cite{MassiveData}，例如，维基百科知识图谱(DBpedia)和地理信息知识图谱(LinkedGeoData)各自都有大于30亿条的数据，而蛋白质知识图谱(UniProt)更是有大于130亿条的数据。在数据量如此巨大的情况下，实际应用场景需要查询性能更高的图数据库来满足业务需要。在这种情况下，业界对图数据库性能的优化，尤其是对SPARQL的查询优化显得尤为重要。
 
-近年来人工智能的迅速发展为数据库查询问题提供了新的机会\cite{MLforDB}。人工智能技术强大的适应性和数据表征能力能够智能地对大量、复杂、动态的数据和工作负载进行深入的分析。在现有工作中，已有许多基于机器学习的数据管理技术被提出。研究人员分别从数据库系统调优和查询优化两方面出发，提出了如SageDB\cite{SageDB}、GALO\cite{GALO}、Neo\cite{Neo}、
+近年来人工智能的迅速发展为数据库查询问题提供了新的研究思路\cite{MLforDB}。人工智能技术强大的适应性和数据表征能力能够智能地对大量、复杂、动态的数据和工作负载进行深入的分析。在现有工作中，已有许多基于机器学习的数据管理技术被提出。研究人员分别从数据库系统调优和查询优化两方面出发，提出了如SageDB\cite{SageDB}、GALO\cite{GALO}、Neo\cite{Neo}、
 SkinnerDB\cite{SkinnerDB}等人工智能赋能的数据库新技术。
 
 虽然研究人员利用人工智能技术针对查询优化已经进行了很多研究工作，但是它们大多是面向关系数据库的，而尚未有研究针对图数据库的智能查询优化问题。因此，基于人工智能的图数据查询优化问题亟待解决。
@@ -28,7 +28,7 @@ Marcus等人也将深度强化学习应用于查询优化中，提出了一个�
 
 \subsection{SPARQL查询优化的研究}[Research status in SPARQL]在SPARQL查询优化的方向上，也有很多研究者做出了努力。Markus在ARQ(Apache SPARQL Processor)的基础上进行了改进\cite{OptARQ}，做出了optARQ原型，它通过建立选择性估计索引的方式，来最小化查询中间结果的生成数量，从而提高查询的效率。Groppe认为SPARQL语言不够精简\cite{coreSPARQL}，他提出了SPARQL语言的核心部分，并称之为coreSPARQL，它具有与SPARQL相同的表达能力，但是消除了SPARQL的冗余语言构造，而且它的语法对机器更加友好。Groppe将SPARQL语言转换为coreSPARQL语言，并开发了一组重写规则来优化coreSPRQL查询，以此来提高执行效率。
 
-国内学者在SPARQL的查询优化上也做出了很多的努力。武汉大学信息资源研究中心提出了一种优化方法\cite{XuLei}，他们使用RDF模式信息来精简SPARQL基本图模式，然后使用B树结构快速估计SPARQL连接图的节点大小及边权值，使用连接代价估计并结合动态规划方法找到最优逻辑查询计划。除了这种基于传统算法的优化方法，启发式算法也得到了大量的应用，例如，有学者提出了一种基于精英蚁群算法与权重矩阵的SPARQL查询优化算法\cite{精英蚁群}，他针对不同的图形状设计了有效的权重矩阵模型，为不同的查询形状设置了专门的优化参数，然后将权重矩阵作为蚁群算法的输入参数，分别利用人工蚁群与精英蚁群方法对SPARQL不同形状的查询语句进行优化。
+国内学者在SPARQL的查询优化上也做出了很多的努力。武汉大学信息资源研究中心提出了一种优化方法\cite{XuLei}，他们使用RDF的模式信息来精简SPARQL基本图模式(BGP)，然后通过运用B树结构来迅速估计SPARQL连接图的节点大小和边的权值大小，估计连接代价并结合动态规划方法来找到最优逻辑查询计划。除了这种基于传统算法的优化方法，启发式算法也得到了大量的应用，例如，有学者提出了一种基于精英蚁群算法与权重矩阵的SPARQL查询优化算法\cite{精英蚁群}，他针对不同的图形状设计了有效的权重矩阵模型，为不同的查询形状设置了专门的优化参数，然后将权重矩阵作为蚁群算法的输入参数，分别利用人工蚁群与精英蚁群方法对SPARQL不同形状的查询语句进行优化。
 
 \subsection{研究现状分析}[Research status analytics]
 根据国内外对SPARQL查询优化的研究内容，对研究现状的分析如下：
@@ -53,7 +53,7 @@ Marcus等人也将深度强化学习应用于查询优化中，提出了一个�
 
 \section{RDF图模型}
 
-RDF全称为资源描述框架(resource description framework)，是万维网联盟(World Wide Web consortium，简称W3C)制定的在语义Web（semantic Web）上表示和交换机器可理解(machine-understandable)信息的标准数据模型。在互联网中，所有能够用RDF数据表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识符(URI)来表示。在RDF图中，每个资源具有一个HTTP URI作为其唯一id。
+万维网联盟(World Wide Web consortium，简称W3C)为了在语义网络(semantic web)上表示和交换机器可理解的信息，创建了一种标准资源描述框架RDF(resource description framework)。在互联网络中，所有能够用RDF数据表示的对象都称之为资源，例如所有的事物、概念和信息等。资源通常情况下使用唯一资源标识符(URI)来表示。
 
  \begin{definition}[RDF项(RDF Term)]    
     用I来表示IRI的集合，
@@ -63,8 +63,7 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
 \end{definition}
 
 \begin{definition}[（RDF三元组）]    
-    RDF三元组是形如(s,p,o)的数据组合，又被称为声明。其中s代表主体(subject)，p代表属性(property),
-    o代表客体(object)。三元组的取值空间可以表示为$(I\bigcup RDF-B)\times(I\bigcup RDF-B)\times(I\bigcup RDF-B\bigcup RDF-L)$。
+    RDF三元组是由主体(subject)，属性(property)和客体(object)组成的数据组合(s,p,o)。三元组的取值空间可以表示为$(I\bigcup RDF-B)\times(I\bigcup RDF-B)\times(I\bigcup RDF-B\bigcup RDF-L)$。
     
     例如，对于三元组<Tony, graduateFrom, HIT>，Tony代表主体，graduateFrom(毕业于)代表属性，HIT代表客体。三元组的意思是Tony毕业于HIT。
 \end{definition}
@@ -107,7 +106,7 @@ RDF全称为资源描述框架(resource description framework)，是万维网联
 
 \section{SPARQL语言与查询过程}
 
-SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数据的形式化查询语言，也是目前使用最广泛的查询语言。类似于SQL，SPARQL支持多种查询格式，例如SELECT、ASK、DESCRIBE、CONSTRUCT。其中，SELECT查询格式用于标准查询,以标准的 SPARQL XML 结果格式返回查询结果。ASK 查询返回结果是 yes 或 no,没有具体内容。DESCRIBE 用于提取本体和实例数据的一部分,返回一个图形,其中包含和图形模式匹配的节点的相关信息。
+为了便于RDF数据的检索，万维网联盟(简称为W3C)提出了一种形式化的查询语言SPARQL，它是目前最广泛使用的查询语言之一。类似于SQL，SPARQL也支持例如SELECT、ASK、DESCRIBE、CONSTRUCT的多种查询格式。其中，SELECT查询格式是一种最常用的标准查询，它以标准的XML格式返回查询结果，这个结果是匹配到的RDF图数据。ASK 查询返回结果不包含具体的数据，而是 yes 或 no的判断结果。DESCRIBE 查询是为了提取本体和实例数据的一部分，返回一个包含匹配图模式的结点相关信息的图形。
 \begin{definition}[（三元组模式）] 
     \label{Triple}   
     一个三元组模式(Triple Pattern)是集合$\lbrace (RDF-T \bigcup V)\times(I \bigcup V)\times(RDF-T \bigcup V)\rbrace$的一项，其中V代表变量。三元组模式常用$(s,p,o)$来表示。
@@ -123,23 +122,23 @@ SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数�
     
 \end{definition}
 
-\begin{lstlisting}[caption={SPARQL查询语句},label={sparql-example}]
+\begin{lstlisting}[caption={SPARQL查询语句示例},label={sparql-example}]
     PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
     PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
     SELECT ?X ?Y ?Z
     WHERE
     {
-        ?X rdf:type ub:GraduateStudent .  
-        ?X ub:memberOf ?Z .               
-        ?Z rdf:type ub:Department .       
-        ?Z ub:subOrganizationOf ?Y .      
-        ?Y rdf:type ub:University .       
-        ?X ub:undergraduateDegreeFrom ?Y  
+        ?X rdf:type ub:GraduateStudent .  ------T1
+        ?X ub:memberOf ?Z .               ------T2
+        ?Z rdf:type ub:Department .       ------T3
+        ?Z ub:subOrganizationOf ?Y .      ------T4
+        ?Y rdf:type ub:University .       ------T5        
+        ?X ub:undergraduateDegreeFrom ?Y  ------T6
     }
 \end{lstlisting}
-查询\ref{sparql-example}是一个示例SPARQL查询，其中“?”加字母表示变量，WHERE子句是查询的主要组成部分，包含6个三元组模式(triple pattern)，其中三元组模式通过对RDF三元组中的主体，属性或客体进行变量替换得到。Prefix表示前缀定义，用于替换三元组模式中的相同字符串内容，用于提升SPARQL查询的可读性，类似于其他编程语言中的常量定义。
+查询\ref{sparql-example}是一个示例SPARQL查询，其中“?”加字母表示变量，WHERE子句是查询的主要组成部分，包含6个三元组模式(triple pattern)，其中的三元组模式是用变量替换RDF三元组中的主体(subject)，属性(property)或客体(object)而成的。Prefix表示前缀定义，用于替换三元组模式中的相同字符串内容，用于提升SPARQL查询的可读性，类似于其他编程语言中的常量定义。
 
-如图\ref{SPARQL查询过程}是SPARQL查询处理器的结构。SPARQL查询过程中,用户(包括人和机器)通过一系列接口与系统进行交互，接口将查询请求送入SPARQL查询处理器中，调用底层的RDF存储获取相关的结果记录。SPARQL通过查询器扫描关键词，并且根据标准解析查询程序验证RDF三元组的有效性。如果查询不正确，则在处理的过程中及时通过接口为用户返回错误信息。在 SPARQL 处理器处理查询请求时，首先利用解析器对查询语句进行解析,判断是否存在语法错误。接着在重写查询阶段,以规则为基础优化查询语句。最后通过执行查询计划生成器产生的计划获取RDF数据并通过接口返回给用户。
+如图\ref{SPARQL查询过程}是一个普遍的SPARQL查询处理器模块图。首先，用户通过接口与查询处理器进行交互，用户通过接口向处理器发出一个SPARQL查询请求，在SPARQL处理器接收到用户的SPARQL查询请求时，它会利用解析器对查询语句进行解析，包括词法和语法分析，如果分析过程中发现了错误，则会通过交互接口给用户反馈错误信息。之后，处理器会进入查询重写阶段，它根据一些优化规则对查询进行分析，重写成优化的查询，查询计划生成器会将优化后的查询转换成具体的物理查询计划，最后查询计划会交给RDF底层存储来执行，生成最终的查询结果并返回给用户。
 \begin{figure}[h]
 \centering
 \includegraphics[width = 1\textwidth]{SPARQL}
@@ -149,7 +148,7 @@ SPARQL(simple protocol and RDF query language)是W3C提出的用于检索RDF数�
 
 \section{强化学习}[Reinforcement Learning]
 \subsection{概述}[introduction]
-强化学习(Reinforcement learning)\cite{RLIntroduction}是机器学习中的一个领域，这种方法主要思想是通过与环境的交互来不断学习。其来源于心理学中的行为主义理论，即有机体如何在环境给予的奖励或惩罚的刺激下，逐步形成对刺激的预期，产生能获得最大利益的习惯性行为。例如当婴儿开始学习走路时，他刚开始并不能掌握平衡，并不会直接学会走路，但他通过与周围环境的交互获得反馈，例如摔倒会给他带来疼痛感（惩罚），顺利走出第一步保持了平衡（奖励），婴儿就会知道每个动作的后果（获得惩罚或奖励），从而逐渐选择奖励最多的动作，直到完全学会走路（奖励最大化）。当我们从计算机科学的角度看待这种方法时，我们可以将其解释为一个函数。该函数尝试使奖励累积结果最大化，而无需告知必须采取何种行动。
+强化学习(Reinforcement learning)\cite{RLIntroduction}是机器学习的一种，这种方法主要是让学习者通过不断获得环境的反馈来学习。强化学习方法最早是来源于心理学中的行为主义理论，这个理论是关于一个有机体如何在接受环境给予的奖励或惩罚的刺激下，逐渐形成对环境刺激的预期，最终学会做出能获得最大利益的习惯性行为。例如当婴儿开始学习走路时，他刚开始并不能掌握平衡，并不会直接学会走路，但他通过与周围环境的交互获得反馈，例如摔倒会给他带来疼痛感（惩罚），顺利走出第一步保持了平衡（奖励），婴儿就会知道每个动作的后果（获得惩罚或奖励），从而逐渐选择奖励最多的动作，直到完全学会走路（奖励最大化）。当我们从计算机科学的角度看待这种方法时，我们可以将其解释为一个函数。该函数尝试使奖励累积结果最大化，而无需告知必须采取何种行动。
 
 很多形式的有监督机器学习方法通常都有很多的输入输出对，每一个输入输出都是提前备好的训练数据集，训练过程会被告知要采取哪些动作，但是强化学习不同于前者的是，它必须通过尝试不同的动作，根据与环境的交互获得动作的反馈，从而确定采取哪些动作能产生最大的回报。强化学习更加专注于在线规划，需要在探索未知的领域和遵从现有知识之间找到平衡。
 
@@ -184,7 +183,7 @@ Q学习算法在迭代时针对（状态，动作）二元组进行奖惩，Q(s,
 
 Q值表是所有（状态，动作）二元组与其对应的Q值组成的一张二维表，每迭代一次，这张表的值就更新一次。在学习的过程中，通过不断更新Q值表中（状态，动作）二元组所对应的Q值，从而对Q值表进行更新。随着学习次数的增加，Q值表逐渐趋于稳定，即收敛。学习者在之后做决策的时候，根据Q学习算法学习到的Q值表（经验）做出决策，同时，针对新变化的状态留有一定的学习余地，使得Q学习算法更适用于动态变化的环境。
 
-在t时刻，当前环境的状态为$s_t$，学习者选择了动作$a_i$，并且执行这个动作，经过与环境的交互，学习者的状态由$s_t$变成了$s_{t+1}$，并且环境反馈给学习者一个反馈值$r$，算法根据公式\ref{QValue}\cite{RLIntroduction}更新Q值表：
+在t时刻，环境的状态为$s_t$的情况下，假如学习者选择执行动作$a_i$，通过学习者(agent)与环境的交互，学习者的状态由$s_t$变成了$s_{t+1}$，并且环境反馈给学习者一个反馈值$r$，算法根据公式\ref{QValue}\cite{RLIntroduction}更新Q值表：
 \begin{equation}
     \label{QValue}
     Q(s_t,a_i)=(1-\alpha)*Q(s_t,a_i)+\alpha *[r(s_t,a_i)+\gamma *maxQ(s_{t+1},a)]
@@ -196,11 +195,11 @@ $\alpha$是学习因子，$0<\alpha <1$；
 
 $\gamma$是折扣因子，$0<\gamma <1$；
 
-$r(s_t,\alpha_i)$：在t时刻学习者在状态$s_t$，执行动作$\alpha_i$从环境获得的回报；
+$r(s_t,\alpha_i)$：在t时刻，学习者的状态为$s_t$，他执行动作$\alpha_i$后从环境获得奖励；
 
 $Q(s_t,\alpha_i)$：策略$\pi=(s_t,\alpha_i)$所对应的累计奖赏值；
 
-在动作选择的过程中，需要用到动作选择策略，可以使用随机动作法，也常采用贪心策略($\varepsilon-greedy$)，即学习者在选择动作时，以$\varepsilon$的概率自由探索，以$1-\varepsilon$的概率根据学习的经验选择动作。动作选择策略只需要满足一定条件就能保证Q函数的最终收敛，Watkins在论文\cite{QLearning3}中证明了学习算法的收敛性。所以，Q学习算法是一种非常有效的模型无关的强化学习算法。
+在动作选择的过程中，需要用到动作选择策略，可以使用随机动作法，也常采用贪心策略($\varepsilon-greedy$)，即学习者在选择动作时，以$\varepsilon$的概率自由探索，以$1-\varepsilon$的概率根据学习的经验选择动作。动作选择策略只需要满足一定条件就能保证Q函数的最终收敛。所以，Q学习算法是一种非常有效的模型无关的强化学习算法。
 
 Q学习算法的执行步骤如下：
 \begin{enumerate}
@@ -213,7 +212,7 @@ Q学习算法的执行步骤如下：
 \end{enumerate}
 
 \subsection{深度Q学习算法(DQN)}[DQN]
-Q学习算法能够较好地解决很多问题，但是如果在情况较为复杂，状态与动作的组合太多甚至无限多的时候，Q矩阵的存储容量和计算复杂度将会急剧上升。为了解决这个问题，Graves等人提出了结合深度学习与Q学习的算法深度Q学习网络算法\cite{DQNNature}，也被广泛地称为DQN。目前，DQN受到了许多关注和探索，不仅被应用于自动控制领域，也被尝试应用于包括计算机视觉领域在内的其他领域。
+Q学习算法能够较好地解决很多问题，但是如果在情况较为复杂，状态与动作的组合太多甚至无限多的时候，Q矩阵的存储容量和计算复杂度将会急剧增大。这个问题并非无法解决，Graves等人提出了结合深度学习与Q学习算法的深度Q学习算法\cite{DQNNature}，也被广泛地称为DQN。目前，DQN受到了许多关注和探索，不仅被应用于自动控制领域，也被尝试应用于包括计算机视觉领域在内的其他领域。
 
 一般而言，深度学习与强化学习结合的思路有以下几种：利用深度神经网络来模拟环境，即输出动作对状态的改变方式和相应的回报值；利用深度神经网络来估计Q值函数；直接利用深度神经网络来学习策略。DQN属于第二种，可以通过神经网络回归拟合出Q值的近似值，而不是像Q学习算法一样记住所有的Q值。
 
@@ -281,7 +280,7 @@ Jena具体的接口和功能主要有：
     \begin{enumerate}
         \item 内存模式。该方式是把Model中的信息读取并存储到内存中，因此它的存储速度比其他的存储模式更快，但是这样会受制于本机的内存容量，不适合存储较大规模的模型。
         \item TDB方式。TDB方式是以本地三元组的方式进行存储，是Triple Database的意思。TDB是一个只负责查询与存储OWL/RDF数据的图数据库，而且能够通过SPARQL语言来完成基于图的精确有效的查询。TDB使用的是硬盘的存储方式，拥有较大的存储容量，能够满足大部分用户的存储需求。目前，Jena最推荐且常用的一种存储方式就是TDB。
-        \item SDB方式。SDB是一种基于SQL数据库的存储方式。该方式是先分割本体模型中的数据关系，然后把关系保存到关系型数据库中，这种方式可以将Jena框架与已经成熟的SQL数据库连接，使得开发者构建应用时可以利用存有的关系型数据。但是SQL的性能和稳定性都不如TDB的方式。
+        \item SDB方式。SDB是一种基于SQL关系型数据库的存储方式。这种方式是先分割本体模型中的数据关系，之后把关系保存到关系型数据库中，这样就可以将Jena框架与已经成熟的SQL数据库连接，使得开发者构建应用时可以利用存有的关系型数据。但是SQL的性能和稳定性都不如TDB的方式。
     \end{enumerate}
     \item 服务机制。Jena提供了Fuseki，它是一个SPARQL服务器。它可以作为操作系统，Java Web应用程序和独立服务器运行。它提供了安全性方面的保障机制(Apache Shiro)，并具有用于服务器监视和管理的用户界面。
 \end{enumerate}
@@ -294,9 +293,7 @@ Jena具体的接口和功能主要有：
 
 \section{优化问题描述}[BGP]
 SPARQL的查询多种多样，其中包括图模式匹配查询，导航式查询和分析性查询这三个大类型，但是最常见最常用的查询是图模式匹配查询。在图模式匹配查询中，基本图模式匹配查询(BGP)又是核心。在如下SPARQL查询语句\ref{sparql1}中:
-\begin{lstlisting}[caption={SPARQL查询语句},label={sparql1}]
-    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-    PREFIX ub: <http://www.lehigh.edu/~zhp2/2004/0401/univ-bench.owl#>
+\begin{lstlisting}[caption={SPARQL查询语句示例},label={sparql1}]
     SELECT ?X ?Y ?Z
     WHERE
     {

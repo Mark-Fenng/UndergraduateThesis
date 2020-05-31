@@ -58,14 +58,14 @@
 }
 
 \begin{cabstract}
-随着知识图谱的广泛使用和RDF数据规模的不断增大，对SPARQL查询效率不断提出更高的要求，所以SPARQL的查询优化一直是研究的热点。近年来，人工智能技术在关系型数据库中得到了大量的研究和应用，为SQL的查询效率带来了显著的提升，然而基于人工智能的SPARQL查询优化却一直没有得到研究，所以本文旨在使用强化学习技术来优化SPARQL查询，来实现传统优化方法无法达到的优化效果。
+随着知识图谱的广泛使用和RDF数据规模的不断增大，业界对SPARQL查询效率不断提出更高的要求，所以SPARQL的查询优化一直是研究的热点。近年来，人工智能技术在关系型数据库中得到了大量的研究和应用，为SQL的查询效率带来了显著的提升，然而基于人工智能的SPARQL查询优化却一直没有得到研究，所以本文旨在使用强化学习技术来优化SPARQL查询，实现传统优化方法无法达到的优化效果。
 
-本文针对SPARQL查询中的基本图模式，使用强化学习方法来优化其中三元组模式的连接顺序。本文将强化学习问题转换为马尔可夫决策过程(MDP)，定义了马尔可夫决策过程的五元组(状态，动作，策略，奖励，初始状态)，使用了创新的方法对状态和动作进行特征化，并提出了奖励的计算方法。本文基于Jena图数据库，使用自己实现的优化模块对其中的基本图模式优化模块进行替换，对强化学习模型进行了训练和改进，最后使用LUBM标准数据集和查询集对本文的优化方法进行了有效性测试。
+本文针对SPARQL查询中的基本图模式，使用强化学习方法来优化其中三元组模式的连接顺序。本文将强化学习问题转换为马尔可夫决策过程(MDP)，定义了马尔可夫决策过程的五元组(状态，动作，策略，奖励，初始状态)，使用了创新的方法对状态和动作进行特征化，并提出了奖励的计算方法。本文基于Apache Jena图数据库，使用了自己实现的优化模块对其中的基本图模式优化模块进行替换，对强化学习模型进行了训练和改进，最后使用LUBM标准数据集和查询集对本文的优化方法进行了测试和验证。
 
 \end{cabstract}
 
 \begin{eabstract}
     With the widespread application of knowledge graphs and the increasing scale of RDF data, the industry continues to raise higher requirements on SPARQL query efficiency. Hence, SPARQL query optimization has always been a research hot spot. In recent years, artificial intelligence technology has been widely researched and applied in relational databases, which has brought significant improvement in SQL query efficiency. However, SPARQL query optimization based on artificial intelligence has not been researched. This article aims to use Reinforcement Learning to optimize SPARQL queries and achieve great optimization effect that traditional optimization methods can't do. 
     
-    In this paper, for the basic graph pattern(BGP) in SPARQL query, the reinforcement learning method is used to optimize the join order of the triple patterns. This paper converts the reinforcement learning problem to a Markov decision process (MDP) and defines the five-tuple(state, action, policy, reward, initial state) of MDP. The paper uses innovative methods to encode state and action, and proposes a method of calculating rewards. Based on the Jena graph database, this article uses the optimization module implemented by myself to replace Jena's original BGP optimization module, trains and improves the reinforcement learning model. Finally, I use the LUBM standard data set and query set to test the effectiveness of the optimization method raised in this paper.
+    In this paper, for the basic graph pattern(BGP) in SPARQL query, the reinforcement learning method is used to optimize the join order of the triple patterns. This paper converts the reinforcement learning problem to a Markov decision process (MDP) and defines the five-tuple(state, action, policy, reward, initial state) of MDP. The paper uses innovative methods to encode state and action, and proposes a method of calculating rewards. Based on the Apache Jena graph database, this article uses the optimization module implemented by myself to replace Jena's original BGP optimization module, trains and improves the reinforcement learning model. Finally, I use the LUBM standard data set and query set to test the effectiveness of the optimization method raised in this paper.
 \end{eabstract}
